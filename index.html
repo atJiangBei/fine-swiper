@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Fine-Swiper</title>
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,user-scalable=no"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="http://jiangbei.online/images/logo60.png"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        user-select: none;
+      }
+      body {
+        background-color: #f8f8f8;
+      }
+      .title {
+        padding: 20px 0;
+        font-size: 18px;
+        line-height: 36px;
+        text-align: center;
+        color: #1e70cd;
+      }
+      .icon {
+        width: 28px;
+      }
+      .bg-white {
+        background: white;
+      }
+      .bg-pink {
+        background: pink;
+      }
+      .bg-LightPink {
+        background: LightPink;
+      }
+      .bg-PaleVioletRed {
+        background: PaleVioletRed;
+      }
+      .bg-blue {
+        background: #3959ef;
+      }
+      .bg-CadetBlue {
+        background: CadetBlue;
+      }
+      .bg-CornflowerBlue {
+        background: CornflowerBlue;
+      }
+      .bg-moccasin {
+        background: moccasin;
+      }
+
+      header {
+        padding: 10px 50px;
+        display: flex;
+        justify-content: space-between;
+        box-shadow: 3px 3px 5px #efefef;
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        position: fixed;
+        width: 100%;
+        box-sizing: border-box;
+        left: 0;
+        top: 0;
+        z-index: 100;
+      }
+      footer {
+        padding: 50px 0;
+        background: #27303f;
+      }
+
+      .header-left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .header-left span {
+        font-size: 18px;
+        line-height: 1.5;
+        color: #337bf8;
+        margin-left: 8px;
+        font-weight: bold;
+      }
+      .header-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .header-right a {
+        margin-left: 10px;
+        color: #337bf8;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      #root {
+        height: 596px;
+        width: 100%;
+        overflow: hidden;
+        cursor: -webkit-grab;
+        position: relative;
+      }
+      #root:active {
+        cursor: -webkit-grabbing;
+      }
+      #root > div:first-child {
+        height: 100%;
+        width: 100%;
+        display: flex;
+      }
+      #root > div:first-child > div {
+        flex-shrink: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      .slide-fine-swiper-content h1 {
+        font: italic bold 120px/100% Arial;
+        color: #fff;
+        padding-right: 20px;
+      }
+      .slide-fine-swiper-content h3 {
+        font: italic bold 50px/100px Arial;
+        color: #fdd000;
+      }
+      #root-page {
+        position: absolute;
+        width: 100%;
+        height: 32px;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #root-page span {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        opacity: 1;
+        border-radius: 10px;
+        background: white;
+        margin: 0 3px;
+        cursor: pointer;
+        transition: width 0.3s ease-in-out;
+      }
+      #root-page span.active {
+        background: #fdd000;
+        width: 12px;
+      }
+      #root > .prev {
+        background: url(./static/icons/banner_arrow.png) no-repeat left top;
+        position: absolute;
+        left: 20px;
+        top: 55%;
+        margin-top: -35px;
+        width: 70px;
+        height: 70px;
+        z-index: 999;
+      }
+      #root > .next {
+        background: url(./static/icons/banner_arrow.png) no-repeat left bottom;
+        position: absolute;
+        right: 20px;
+        top: 55%;
+        margin-top: -35px;
+        width: 70px;
+        height: 70px;
+        z-index: 999;
+        outline: none;
+      }
+      /*  */
+      .fine-button-box {
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .fine-button-box button {
+        padding: 10px 15px;
+        line-height: 1.2;
+        font-size: 14px;
+        border: 1px solid #efefef;
+        background: #fff;
+        outline: none;
+        cursor: pointer;
+      }
+      .fine-button-box button:active {
+        background-color: #efefef;
+      }
+      .fine-button-box button.active {
+        background-color: #fdd000;
+        color: #fff;
+      }
+
+      /* fade */
+      #root-fade {
+        margin: 0 auto;
+        height: 400px;
+        width: 80%;
+        overflow: hidden;
+        cursor: -webkit-grab;
+        position: relative;
+      }
+      #root-fade:active {
+        cursor: -webkit-grabbing;
+      }
+      #root-fade > div:first-child {
+        height: 100%;
+        width: 100%;
+      }
+      #root-fade > div:first-child > div {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        left: 0;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      @media screen and (max-width: 500px) {
+        header {
+          padding: 10px 10px;
+        }
+        .slide-fine-swiper-content h1 {
+          font: italic bold 24px/100% Arial;
+          color: #fff;
+          padding-right: 0px;
+        }
+        .slide-fine-swiper-content h3 {
+          font: italic bold 16px/24px Arial;
+          color: #fdd000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <img src="http://jiangbei.online/images/logo60.png" class="icon" />
+        <span>Fine-Swiper</span>
+      </div>
+      <div class="header-right">
+        <a>其它</a>
+        <a>博客</a>
+        <a href="https://github.com/">github</a>
+      </div>
+    </header>
+    <div id="root" class="bg-moccasin">
+      <div class="slide-fine-swiper-content">
+        <div class="bg-blue">
+          <h1>Fine Swiper</h1>
+          <h3>精巧的，灵活的触摸滑动库</h3>
+        </div>
+        <div class="bg-pink">
+          <h1>Hello World</h1>
+        </div>
+        <div class="bg-CadetBlue">
+          <h1>Hello World</h1>
+        </div>
+        <div class="bg-CornflowerBlue">
+          <h1>Hello World</h1>
+        </div>
+      </div>
+      <div class="root-page" id="root-page">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <span class="prev" id="slide-prev"></span>
+      <span class="next" id="slide-next"></span>
+    </div>
+    <div id="btns" class="fine-button-box">
+      <button class="fine-button">0</button>
+      <button class="fine-button">1</button>
+      <button class="fine-button">2</button>
+      <button class="fine-button">3</button>
+    </div>
+    <div class="fade-container">
+      <div class="title">渐隐渐显模式</div>
+      <div id="root-fade">
+        <div id="list-fade" class="slide-fine-swiper-content">
+          <div class="bg-blue">
+            <h1>Fine Swiper</h1>
+            <h3>精巧的，灵活的触摸滑动库</h3>
+          </div>
+          <div class="bg-pink">
+            <h1>1</h1>
+          </div>
+          <div class="bg-CadetBlue">
+            <h1>2</h1>
+          </div>
+          <div class="bg-CornflowerBlue">
+            <h1>3</h1>
+          </div>
+        </div>
+      </div>
+      <div id="fadebtns" class="fine-button-box">
+        <button class="fine-button">0</button>
+        <button class="fine-button">1</button>
+        <button class="fine-button">2</button>
+        <button class="fine-button">3</button>
+      </div>
+    </div>
+    <footer></footer>
+  </body>
+  <script src="./fine-swiper.min.js"></script>
+  <script>
+    window.onload = function() {
+      function toggleClassName(els, index) {
+        for (let i = 0; i < els.length; i++) {
+          const el = els[i]
+          el.className = ''
+        }
+        els[index].className = 'active'
+      }
+      const { createSlideSwiper, cresteFadeSwiper } = FineSwiper
+
+      ;(() => {
+        const spans = document
+          .querySelector('#root-page')
+          .getElementsByTagName('span')
+        const btnList = document
+          .getElementById('btns')
+          .getElementsByTagName('button')
+        const slidePrev = document.querySelector('#slide-prev')
+        const slideNext = document.querySelector('#slide-next')
+        let index = 0
+        const swiper = createSlideSwiper({
+          root: document.getElementById('root'),
+          loop: true,
+          auto: false,
+          delayed: 2000,
+          direction: 'horizontal', //"horizontal""vertical"
+          index: index, //默认第一张
+          disabledHand: false, //禁止手动滑动
+          callback(index) {
+            // console.log('index改变', index)
+            index = index
+            toggleClassName(spans, index)
+            toggleClassName(btnList, index)
+          },
+          enter(index) {
+            console.log('位置改变完成', index)
+          }
+        })
+        slidePrev.addEventListener('click', function() {
+          index--
+          if (index < 0) {
+            index = 3
+          }
+          swiper.moveTo(index)
+        })
+        slideNext.addEventListener('click', function() {
+          index++
+          if (index > 3) {
+            index = 0
+          }
+          swiper.moveTo(index)
+        })
+        toggleClassName(spans, 0)
+        toggleClassName(btnList, 0)
+        ;[].slice.call(btnList).forEach((dom, i) => {
+          ;(function(i) {
+            dom.onclick = function() {
+              swiper.moveTo(i)
+            }
+          })(i)
+        })
+      })()
+      ;(() => {
+        const btnList = document
+          .getElementById('fadebtns')
+          .getElementsByTagName('button')
+        const swiper = cresteFadeSwiper({
+          root: document.getElementById('root-fade'),
+          loop: true,
+          auto: true,
+          delayed: 2000,
+          direction: 'horizontal', //"horizontal""vertical"
+          index: 0, //默认第一张
+          disabledHand: false, //禁止手动滑动
+          callback(index) {
+            console.log('index改变', index)
+            // toggleClassName(spans, index)
+            toggleClassName(btnList, index)
+          },
+          enter(index) {
+            console.log('位置改变完成', index)
+          }
+        })
+        ;[].slice.call(btnList).forEach((dom, i) => {
+          ;(function(i) {
+            dom.onclick = function() {
+              swiper.moveTo(i)
+            }
+          })(i)
+        })
+      })()
+    }
+  </script>
+</html>
