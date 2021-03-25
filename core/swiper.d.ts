@@ -1,0 +1,32 @@
+import { direction, timer, Options } from './../type/index';
+declare class FineSwiper {
+    root: Element;
+    direction: direction;
+    loop: boolean;
+    auto: boolean;
+    delayed: number;
+    startTime: number;
+    callback: Function;
+    enter: Function;
+    startingPoint: number;
+    isTracking: boolean;
+    captureClick: boolean;
+    disabledHandSlideing: boolean;
+    timer: timer;
+    defaultIndex: number;
+    slider: Element;
+    children: HTMLCollection;
+    length: number;
+    scaleSize: number;
+    index: number;
+    will: boolean;
+    scaleWidth: number;
+    scaleHeight: number;
+    _closeDefault: (event: Event) => void;
+    constructor(options: Options);
+    private closeDefault;
+    _visibilitychange(): void;
+    clear(): void;
+    startMove(nowDistance: number, targetDistance: number, speed: number | any, cb: Function): Promise<unknown>;
+}
+export default FineSwiper;
