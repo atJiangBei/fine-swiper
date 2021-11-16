@@ -28,8 +28,8 @@ class FineFideSwiper extends Swiper {
     this.slider.addEventListener('touchend', this._end, this.will)
     this.slider.addEventListener('touchcancel', this._end, this.will)
     this.slider.addEventListener('mousedown', this._start, this.will)
-    this.slider.addEventListener('mousemove', this._move, this.will)
-    this.slider.addEventListener('mouseup', this._end, this.will)
+    document.addEventListener('mousemove', this._move, this.will)
+    document.addEventListener('mouseup', this._end, this.will)
   }
   _visibilitychange() {
     if (document.hidden) {
@@ -275,8 +275,8 @@ class FineFideSwiper extends Swiper {
     this.slider.removeEventListener('touchmove', this._move, this.will)
     this.slider.removeEventListener('touchend', this._end, this.will)
     this.slider.removeEventListener('mousedown', this._start, this.will)
-    this.slider.removeEventListener('mousemove', this._move, this.will)
-    this.slider.removeEventListener('mouseup', this._end, this.will)
+    document.removeEventListener('mousemove', this._move, this.will)
+    document.removeEventListener('mouseup', this._end, this.will)
     this.slider.removeEventListener('click', this._closeDefault, true)
     document.addEventListener('visibilitychange', this._visibilitychange)
   }
