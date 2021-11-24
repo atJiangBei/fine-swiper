@@ -379,35 +379,35 @@
           })(i);
         });
       })();
-      (() => {
-        const btnList = document
-          .getElementById('fadebtns')
-          .getElementsByTagName('button');
-        const swiper = cresteFadeSwiper({
-          root: document.getElementById('root-fade'),
-          loop: true,
-          auto: true,
-          delayed: 2000,
-          direction: 'horizontal', //"horizontal""vertical"
-          index: 0, //默认第一张
-          disabledHand: false, //禁止手动滑动
-          callback(index) {
-            console.log('index改变', index);
-            // toggleClassName(spans, index)
-            toggleClassName(btnList, index);
-          },
-          enter(index) {
-            console.log('位置改变完成', index);
-          },
-        });
-        [].slice.call(btnList).forEach((dom, i) => {
-          (function (i) {
-            dom.onclick = function () {
-              swiper.moveTo(i);
-            };
-          })(i);
-        });
-      })();
+      // (() => {
+      //   const btnList = document
+      //     .getElementById('fadebtns')
+      //     .getElementsByTagName('button');
+      //   const swiper = cresteFadeSwiper({
+      //     root: document.getElementById('root-fade'),
+      //     loop: true,
+      //     auto: true,
+      //     delayed: 2000,
+      //     direction: 'horizontal', //"horizontal""vertical"
+      //     index: 0, //默认第一张
+      //     disabledHand: false, //禁止手动滑动
+      //     callback(index) {
+      //       console.log('index改变', index);
+      //       // toggleClassName(spans, index)
+      //       toggleClassName(btnList, index);
+      //     },
+      //     enter(index) {
+      //       console.log('位置改变完成', index);
+      //     },
+      //   });
+      //   [].slice.call(btnList).forEach((dom, i) => {
+      //     (function (i) {
+      //       dom.onclick = function () {
+      //         swiper.moveTo(i);
+      //       };
+      //     })(i);
+      //   });
+      // })();
     };
   </script>
 </html>
