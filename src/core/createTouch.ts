@@ -19,18 +19,23 @@ function registerEnd(root: Root, callback: Callback) {
   document.addEventListener('touchcancel', callback);
   document.addEventListener('moseup', callback);
 }
-class Touch {
+class FineTouch {
   public hasMove: boolean;
+  public isStart: boolean;
   constructor(option: Option) {
     const { root } = option;
     this.hasMove = true;
+    this.isStart = false;
     registerStart(root, (e: Event) => {
       this.hasMove = false;
+      this.isStart = true;
     });
     registerMove(root, (e: Event) => {
       this.hasMove = true;
     });
     registerEnd(root, (e: Event) => {
+      if (!this.isStart) return
+      this.isStart = false
       if (!this.hasMove) {
         this.hasMove = true;
         return;
@@ -39,12 +44,9 @@ class Touch {
   }
 }
 
-const createTouch = (option: Option): Touch => {
-  return new Touch(option);
+const createTouch = (option: Option): FineTouch => {
+  return new FineTouch(option);
 };
 
 export default createTouch;
 
-createTouch({
-  root: document.createElement('div'),
-});
