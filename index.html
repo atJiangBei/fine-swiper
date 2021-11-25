@@ -318,96 +318,11 @@
   <script src="./fine-swiper.min.js"></script>
   <script>
     window.onload = function () {
-      function toggleClassName(els, index) {
-        for (let i = 0; i < els.length; i++) {
-          const el = els[i];
-          el.className = '';
-        }
-        els[index].className = 'active';
-      }
-      const { createSlideSwiper, cresteFadeSwiper } = FineSwiper;
-
-      (() => {
-        const spans = document
-          .querySelector('#root-page')
-          .getElementsByTagName('span');
-        const btnList = document
-          .getElementById('btns')
-          .getElementsByTagName('button');
-        const slidePrev = document.querySelector('#slide-prev');
-        const slideNext = document.querySelector('#slide-next');
-        let index = 0;
-        const swiper = createSlideSwiper({
-          root: document.getElementById('root'),
-          loop: true,
-          auto: false,
-          delayed: 2000,
-          direction: 'horizontal', //"horizontal""vertical"
-          index: index, //默认第一张
-          disabledHand: false, //禁止手动滑动
-          callback(index) {
-            // console.log('index改变', index)
-            index = index;
-            toggleClassName(spans, index);
-            toggleClassName(btnList, index);
-          },
-          enter(index) {
-            console.log('位置改变完成', index);
-          },
-        });
-        slidePrev.addEventListener('click', function () {
-          index--;
-          if (index < 0) {
-            index = 3;
-          }
-          swiper.moveTo(index);
-        });
-        slideNext.addEventListener('click', function () {
-          index++;
-          if (index > 3) {
-            index = 0;
-          }
-          swiper.moveTo(index);
-        });
-        toggleClassName(spans, 0);
-        toggleClassName(btnList, 0);
-        [].slice.call(btnList).forEach((dom, i) => {
-          (function (i) {
-            dom.onclick = function () {
-              swiper.moveTo(i);
-            };
-          })(i);
-        });
-      })();
-      // (() => {
-      //   const btnList = document
-      //     .getElementById('fadebtns')
-      //     .getElementsByTagName('button');
-      //   const swiper = cresteFadeSwiper({
-      //     root: document.getElementById('root-fade'),
-      //     loop: true,
-      //     auto: true,
-      //     delayed: 2000,
-      //     direction: 'horizontal', //"horizontal""vertical"
-      //     index: 0, //默认第一张
-      //     disabledHand: false, //禁止手动滑动
-      //     callback(index) {
-      //       console.log('index改变', index);
-      //       // toggleClassName(spans, index)
-      //       toggleClassName(btnList, index);
-      //     },
-      //     enter(index) {
-      //       console.log('位置改变完成', index);
-      //     },
-      //   });
-      //   [].slice.call(btnList).forEach((dom, i) => {
-      //     (function (i) {
-      //       dom.onclick = function () {
-      //         swiper.moveTo(i);
-      //       };
-      //     })(i);
-      //   });
-      // })();
+      const { createTouch } = FineSwiper;
+      const root = document.querySelector("#root");
+      const swipe = createTouch({
+        root
+      })
     };
   </script>
 </html>
