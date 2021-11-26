@@ -182,8 +182,8 @@ export class FineTouch {
   }
 }
 
-const createTouch = (option: Option): void => {
-  new FineTouch(option);
+const createTouch = (option: Option): FineTouch => {
+  return new FineTouch(option);
 };
 
 export default createTouch;
