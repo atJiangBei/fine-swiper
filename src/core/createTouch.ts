@@ -1,11 +1,46 @@
-type Root = HTMLDivElement;
+type Root = HTMLElement;
+//start
+type StartCallbackArguments = {
+  startX: number,
+  startY: number,
+  event: MouseEvent | TouchEvent
+}
+type StartCallback = {
+  (arg: StartCallbackArguments): void
+}
+//moveing
+type MoveCallbackArguments = {
+  movedX: number,
+  movedY: number,
+  stepX: number,
+  stepY: number,
+  event: MouseEvent | TouchEvent
+}
+type MoveCallback = {
+  (arg: MoveCallbackArguments): void
+}
+//end
+type EndCallbackArguments = {
+  event: MouseEvent | TouchEvent,
+  speedX: number,
+  speedY: number
+}
+type EndCallback = {
+  (arg: EndCallbackArguments): void
+}
+//option
 type Option = {
   root: Root;
+  startCallback?: StartCallback;
+  moveCallback?: MoveCallback
+  endCallback?: EndCallback
 };
 
 type Callback = {
-  (e: Event | TouchEvent): void;
+  (e: MouseEvent | TouchEvent): void;
 };
+const isTouchEvent = (e: MouseEvent | TouchEvent): e is TouchEvent => e instanceof TouchEvent
+
 function registerStart(root: Root, callback: Callback) {
   root.addEventListener('touchstart', callback);
   root.addEventListener('mousedown', callback);
@@ -22,10 +57,16 @@ function registerEnd(root: Root, callback: Callback) {
 export class FineTouch {
   public hasMove: boolean;
   public isStart: boolean;
+  public startX: number;
+  public startY: number;
   constructor(option: Option) {
-    const { root } = option;
+    const { root, moveCallback = () => { }, startCallback = () => { }, endCallback = () => { } } = option;
     this.hasMove = true;
     this.isStart = false;
+    const positions: Array<MouseEvent | TouchEvent> = []
+    let lastTimeStamp: number = 0;
+    let stepX: number = 0;
+    let stepY: number = 0;
     registerStart(root, (e) => {
       this.hasMove = false;
       this.isStart = true;
@@ -35,24 +76,87 @@ export class FineTouch {
         //360 Browser
         e.preventDefault();
       }
-      const target = e.touches ? e.touches[0] : e;
+      const currentTouch = isTouchEvent(e) ? e.touches[0] : e;
+      const { clientX, clientY } = currentTouch;
+      this.startX = clientX;
+      this.startY = clientY;
+      stepX = clientX;
+      stepY = clientY;
+      lastTimeStamp = e.timeStamp;
+      startCallback({
+        startX: clientX,
+        startY: clientY,
+        event: e
+      })
     });
-    registerMove(root, (e: Event) => {
+    registerMove(root, (e) => {
       this.hasMove = true;
-    });
-    registerEnd(root, (e: Event) => {
       if (!this.isStart) return;
+      const currentTouch = isTouchEvent(e) ? e.touches[0] : e;
+      const { clientX, clientY } = currentTouch;
+      const { startX, startY } = this;
+      moveCallback({
+        movedX: clientX - startX,
+        movedY: clientY - startY,
+        stepX: clientX - stepX,
+        stepY: clientY - stepY,
+        event: e
+      })
+      stepX = clientX;
+      stepY = clientY;
+      if (positions.length > 20) {
+        positions.splice(0, 10);
+      }
+      positions.push(e)
+    });
+    registerEnd(root, (e) => {
+      if (!this.isStart) return;
+
       this.isStart = false;
       if (!this.hasMove) {
         this.hasMove = true;
         return;
       }
+
+      let speedX = 0;
+      let speedY = 0;
+      if (e.timeStamp - lastTimeStamp <= 100) {
+        const endPos = positions.length - 1;
+        let startPos = endPos;
+
+        for (let i = endPos; i >= 0; i--) {
+          const touch = positions[i];
+          if (touch.timeStamp + 100 > lastTimeStamp) {
+            startPos = i
+          }
+        }
+        if (startPos !== endPos) {
+          const timeOffset = positions[endPos].timeStamp - positions[startPos].timeStamp;
+          const targetEvent = positions[startPos];
+          const currentTouch = isTouchEvent(targetEvent) ? targetEvent.touches[0] : targetEvent;
+          const { clientX, clientY } = currentTouch;
+          const movedX = stepX - clientX;
+          const movedY = stepY - clientY;
+          speedX = movedX / timeOffset * (1000 / 60);
+          speedY = movedY / timeOffset * (1000 / 60)
+        }
+      }
+      stepX = 0;
+      stepY = 0;
+      endCallback({
+        event: e,
+        speedX,
+        speedY
+      })
+      lastTimeStamp = 0;
+      positions.length = 0
     });
   }
 }
 
-const createTouch = (option: Option): FineTouch => {
-  return new FineTouch(option);
+const createTouch = (option: Option): void => {
+  new FineTouch(option);
 };
 
 export default createTouch;
+

@@ -247,7 +247,7 @@
   <body>
     <header>
       <div class="header-left">
-        <img src="http://jiangbei.online/images/logo60.png" class="icon" />
+        <!-- <img src="http://jiangbei.online/images/logo60.png" class="icon" /> -->
         <span>Fine-Swiper</span>
       </div>
       <div class="header-right">
@@ -321,7 +321,16 @@
       const { createTouch } = FineSwiper;
       const root = document.querySelector("#root");
       const swipe = createTouch({
-        root
+        root:document,
+        startCallback(arg){
+
+        },
+        moveCallback(arg){
+         // console.log(arg)
+        },
+        endCallback(arg){
+          console.log(arg)
+        }
       })
     };
   </script>
