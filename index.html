@@ -320,13 +320,17 @@
     window.onload = function () {
       const { createTouch } = FineSwiper;
       const root = document.querySelector("#root");
+      let left = 0;
       const swipe = createTouch({
         root:document,
         startCallback(arg){
 
         },
         moveCallback(arg){
-         // console.log(arg)
+         //console.log(arg)
+         left+=arg.stepX
+         console.log(left)
+         root.style.transform = `translateX(${left}px)`
         },
         endCallback(arg){
           console.log(arg)

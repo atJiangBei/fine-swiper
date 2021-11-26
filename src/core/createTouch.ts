@@ -1,4 +1,4 @@
-type Root = HTMLElement;
+type Root = HTMLElement | Document;
 //start
 type StartCallbackArguments = {
   startX: number,
@@ -54,20 +54,38 @@ function registerEnd(root: Root, callback: Callback) {
   document.addEventListener('touchcancel', callback);
   document.addEventListener('mouseup', callback);
 }
+function destroyStart(root: Root, callback: Callback) {
+  root.removeEventListener('touchstart', callback);
+  root.removeEventListener('mousedown', callback);
+}
+function destroyMove(root: Root, callback: Callback) {
+  document.removeEventListener('touchmove', callback);
+  document.removeEventListener('mousemove', callback);
+}
+function destroyEnd(root: Root, callback: Callback) {
+  document.removeEventListener('touchend', callback);
+  document.removeEventListener('touchcancel', callback);
+  document.removeEventListener('mouseup', callback);
+}
 export class FineTouch {
-  public hasMove: boolean;
-  public isStart: boolean;
-  public startX: number;
-  public startY: number;
+  root: Root;
+  hasMove: boolean;
+  isStart: boolean;
+  startMethod: Callback;
+  moveMethod: Callback;
+  endMethod: Callback;
   constructor(option: Option) {
     const { root, moveCallback = () => { }, startCallback = () => { }, endCallback = () => { } } = option;
     this.hasMove = true;
     this.isStart = false;
+    this.root = root;
     const positions: Array<MouseEvent | TouchEvent> = []
     let lastTimeStamp: number = 0;
     let stepX: number = 0;
     let stepY: number = 0;
-    registerStart(root, (e) => {
+    let startX: number = 0;
+    let startY: number = 0;
+    this.startMethod = (e) => {
       this.hasMove = false;
       this.isStart = true;
       if (e.type === 'mousedown') {
@@ -78,8 +96,8 @@ export class FineTouch {
       }
       const currentTouch = isTouchEvent(e) ? e.touches[0] : e;
       const { clientX, clientY } = currentTouch;
-      this.startX = clientX;
-      this.startY = clientY;
+      startX = clientX;
+      startY = clientY;
       stepX = clientX;
       stepY = clientY;
       lastTimeStamp = e.timeStamp;
@@ -88,13 +106,12 @@ export class FineTouch {
         startY: clientY,
         event: e
       })
-    });
-    registerMove(root, (e) => {
+    }
+    this.moveMethod = (e) => {
       this.hasMove = true;
       if (!this.isStart) return;
       const currentTouch = isTouchEvent(e) ? e.touches[0] : e;
       const { clientX, clientY } = currentTouch;
-      const { startX, startY } = this;
       moveCallback({
         movedX: clientX - startX,
         movedY: clientY - startY,
@@ -108,8 +125,8 @@ export class FineTouch {
         positions.splice(0, 10);
       }
       positions.push(e)
-    });
-    registerEnd(root, (e) => {
+    }
+    this.endMethod = (e) => {
       if (!this.isStart) return;
 
       this.isStart = false;
@@ -141,16 +158,27 @@ export class FineTouch {
           speedY = movedY / timeOffset * (1000 / 60)
         }
       }
-      stepX = 0;
-      stepY = 0;
+
       endCallback({
         event: e,
         speedX,
         speedY
       })
+      stepX = 0;
+      stepY = 0;
+      startX = 0;
+      startY = 0;
       lastTimeStamp = 0;
       positions.length = 0
-    });
+    }
+    registerStart(root, this.startMethod);
+    registerMove(root, this.moveMethod);
+    registerEnd(root, this.endMethod);
+  }
+  destroy() {
+    destroyStart(this.root, this.startMethod);
+    destroyMove(this.root, this.moveMethod);
+    destroyEnd(this.root, this.endMethod);
   }
 }
 
