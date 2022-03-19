@@ -21,6 +21,28 @@
       body {
         background-color: #f8f8f8;
       }
+
+      .flex {
+        display: flex;
+      }
+      .flex.jc-center {
+        justify-content: center;
+      }
+      .flex.ai-center {
+        align-items: center;
+      }
+      .fs-18 {
+        font-size: 18px;
+      }
+      .fs-20 {
+        font-size: 20px;
+      }
+      .fs-22 {
+        font-size: 22px;
+      }
+      .fs-24 {
+        font-size: 24px;
+      }
       .title {
         padding: 20px 0;
         font-size: 18px;
@@ -55,7 +77,15 @@
       .bg-moccasin {
         background: moccasin;
       }
-
+      .bg-indigo {
+        background: Indigo;
+      }
+      .bg-midnightBlue {
+        background: midnightBlue;
+      }
+      .bg-slateGray {
+        background: SlateGray;
+      }
       header {
         padding: 10px 50px;
         display: flex;
@@ -98,22 +128,13 @@
         font-size: 14px;
         cursor: pointer;
       }
-      #root {
-        height: 596px;
-        width: 100%;
-        overflow: hidden;
-        cursor: -webkit-grab;
-        position: relative;
-      }
-      #root:active {
-        cursor: -webkit-grabbing;
-      }
-      #root > div:first-child {
+      /*common*/
+      .slide-root > div:first-child {
         height: 100%;
         width: 100%;
         display: flex;
       }
-      #root > div:first-child > div {
+      .slide-root > div:first-child > div {
         flex-shrink: 0;
         height: 100%;
         width: 100%;
@@ -121,6 +142,18 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
+      }
+      /*1*/
+      #root {
+        height: 596px;
+        width: 100%;
+        overflow: hidden;
+        cursor: -webkit-grab;
+        position: relative;
+        margin-top: 50px;
+      }
+      #root:active {
+        cursor: -webkit-grabbing;
       }
       .slide-fine-swiper-content h1 {
         font: italic bold 120px/100% Arial;
@@ -201,6 +234,14 @@
         color: #fff;
       }
 
+      #root-2 {
+        margin: 0 auto;
+        height: 400px;
+        width: 80%;
+        overflow: hidden;
+        cursor: -webkit-grab;
+        position: relative;
+      }
       /* fade */
       #root-fade {
         margin: 0 auto;
@@ -256,7 +297,7 @@
         <a href="https://github.com/">github</a>
       </div>
     </header>
-    <div id="root" class="bg-moccasin">
+    <div id="root" class="bg-moccasin slide-root">
       <div class="slide-fine-swiper-content">
         <div class="bg-blue">
           <h1>Fine Swiper</h1>
@@ -286,6 +327,74 @@
       <button class="fine-button">1</button>
       <button class="fine-button">2</button>
       <button class="fine-button">3</button>
+    </div>
+    <div id="root-2" class="bg-moccasin slide-root">
+      <div class="slide-fine-swiper-content">
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-blue flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            1
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-pink flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            2
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-CadetBlue flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            3
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-CornflowerBlue flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            4
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-PaleVioletRed flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            5
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-indigo flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            6
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-midnightBlue flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            7
+          </div>
+        </div>
+        <div style="width: 300px; display: block">
+          <div
+            class="bg-slateGray flex jc-center ai-center fs-24"
+            style="height: 100%; margin-right: 20px; color: #fff"
+          >
+            8
+          </div>
+        </div>
+      </div>
     </div>
     <div class="fade-container">
       <div class="title">渐隐渐显模式</div>
@@ -318,24 +427,32 @@
   <script src="./fine-swiper.min.js"></script>
   <script>
     window.onload = function () {
-      const { createTouch } = FineSwiper;
-      const root = document.querySelector("#root");
-      let left = 0;
-      const swipe = createTouch({
-        root:document,
-        startCallback(arg){
-
-        },
-        moveCallback(arg){
-         //console.log(arg)
-         left+=arg.stepX
-         console.log(left)
-         root.style.transform = `translateX(${left}px)`
-        },
-        endCallback(arg){
-          console.log(arg)
-        }
-      })
+      const { createTouch, createSlide } = FineSwiper;
+      const createSetActiveMethod = (els = []) => {
+        return (index = 0) => {
+          for (let i = 0; i < els.length; i++) {
+            els[i].classList.remove('active');
+          }
+          els[index].classList.add('active');
+        };
+      };
+      (() => {
+        const pages = document.querySelector('#root-page').children;
+        const setActiveClassNameByIndex = createSetActiveMethod(pages);
+        setActiveClassNameByIndex();
+        createSlide({
+          root: document.querySelector('#root'),
+          loop: true,
+          slideChange: (index) => {
+            setActiveClassNameByIndex(index);
+          },
+        });
+      })();
+      createSlide({
+        root: document.querySelector('#root-2'),
+        loop: false,
+        scaleValue: 300,
+      });
     };
   </script>
 </html>
