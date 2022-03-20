@@ -143,6 +143,15 @@
         align-items: center;
         flex-direction: column;
       }
+      .slide-root-vertical > div:first-child {
+        height: 100%;
+        width: 100%;
+      }
+      .slide-root-vertical > div:first-child > div {
+        flex-shrink: 0;
+        height: 100%;
+        width: 100%;
+      }
       /*1*/
       #root {
         height: 596px;
@@ -233,7 +242,15 @@
         background-color: #fdd000;
         color: #fff;
       }
-
+      #root-1 {
+        margin: 0 auto;
+        height: 400px;
+        width: 80%;
+        overflow: hidden;
+        cursor: -webkit-grab;
+        position: relative;
+        margin-bottom: 40px;
+      }
       #root-2 {
         margin: 0 auto;
         height: 400px;
@@ -241,6 +258,7 @@
         overflow: hidden;
         cursor: -webkit-grab;
         position: relative;
+        margin-bottom: 40px;
       }
       /* fade */
       #root-fade {
@@ -328,6 +346,44 @@
       <button class="fine-button">2</button>
       <button class="fine-button">3</button>
     </div>
+    <div class="title">上下滑动⬇</div>
+    <div id="root-1" class="bg-moccasin slide-root-vertical">
+      <div>
+        <div>
+          <div
+            class="bg-blue flex jc-center ai-center fs-24"
+            style="height: 100%; color: #fff"
+          >
+            1
+          </div>
+        </div>
+        <div>
+          <div
+            class="bg-pink flex jc-center ai-center fs-24"
+            style="height: 100%; color: #fff"
+          >
+            2
+          </div>
+        </div>
+        <div>
+          <div
+            class="bg-CadetBlue flex jc-center ai-center fs-24"
+            style="height: 100%; color: #fff"
+          >
+            3
+          </div>
+        </div>
+        <div>
+          <div
+            class="bg-CornflowerBlue flex jc-center ai-center fs-24"
+            style="height: 100%; color: #fff"
+          >
+            4
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="title">左右滑动➡，自定义刻度（scaleValue）</div>
     <div id="root-2" class="bg-moccasin slide-root">
       <div class="slide-fine-swiper-content">
         <div style="width: 300px; display: block">
@@ -440,18 +496,49 @@
         const pages = document.querySelector('#root-page').children;
         const setActiveClassNameByIndex = createSetActiveMethod(pages);
         setActiveClassNameByIndex();
-        createSlide({
+        const btns = document.querySelector('#btns').children;
+        const setBtnActiveClassNameByIndex = createSetActiveMethod(btns);
+        setBtnActiveClassNameByIndex();
+        const btnPrev = document.querySelector('#slide-prev');
+        const btnNext = document.querySelector('#slide-next');
+        const slideInstance = createSlide({
           root: document.querySelector('#root'),
           loop: true,
           slideChange: (index) => {
             setActiveClassNameByIndex(index);
+            setBtnActiveClassNameByIndex(index);
           },
         });
+        btnPrev.addEventListener('click', () => {
+          slideInstance.toPrevPage();
+        });
+        btnNext.addEventListener('click', () => {
+          slideInstance.toNextPage();
+        });
+        for (let i = 0; i < btns.length; i++) {
+          btns[i].addEventListener('click', () => {
+            slideInstance.toPage(i);
+          });
+        }
+        window.addEventListener('resize', () => {
+          slideInstance.resize();
+        });
       })();
+      createSlide({
+        root: document.querySelector('#root-1'),
+        loop: false,
+        direction: 'vertical',
+        slideChange(index) {
+          console.log(index);
+        },
+      });
       createSlide({
         root: document.querySelector('#root-2'),
         loop: false,
         scaleValue: 300,
+        slideChange(index) {
+          console.log(index);
+        },
       });
     };
   </script>

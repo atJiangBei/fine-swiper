@@ -11,3 +11,8 @@
 [关联](https://atjiangbei.github.io/)
 
 [以此实现的 vue 组件](https://github.com/atJiangBei/solar-vue)
+
+### 备注
+
+- 问：关于偶尔的重复性函数为什么没有复用
+- 答：考虑到后续迭代以及内部功能可能会的优化，保证最大的可维护性。

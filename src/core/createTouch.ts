@@ -25,7 +25,7 @@ export type EndCallbackArguments = {
   movedY: number;
   speedX: number;
   speedY: number;
-  event: MouseEvent | TouchEvent;
+  event?: MouseEvent | TouchEvent;
 };
 type EndCallback = {
   (arg: EndCallbackArguments): void;
@@ -45,30 +45,30 @@ const isTouchEvent = (e: MouseEvent | TouchEvent): e is TouchEvent =>
   e instanceof TouchEvent;
 
 function registerStart(root: Root, callback: Callback) {
-  root.addEventListener('touchstart', callback);
-  root.addEventListener('mousedown', callback);
+  root.addEventListener('touchstart', callback as any);
+  root.addEventListener('mousedown', callback as any);
 }
 function registerMove(root: Root, callback: Callback) {
-  document.addEventListener('touchmove', callback);
-  document.addEventListener('mousemove', callback);
+  document.addEventListener('touchmove', callback as any);
+  document.addEventListener('mousemove', callback as any);
 }
 function registerEnd(root: Root, callback: Callback) {
-  document.addEventListener('touchend', callback);
-  document.addEventListener('touchcancel', callback);
-  document.addEventListener('mouseup', callback);
+  document.addEventListener('touchend', callback as any);
+  document.addEventListener('touchcancel', callback as any);
+  document.addEventListener('mouseup', callback as any);
 }
 function destroyStart(root: Root, callback: Callback) {
-  root.removeEventListener('touchstart', callback);
-  root.removeEventListener('mousedown', callback);
+  root.removeEventListener('touchstart', callback as any);
+  root.removeEventListener('mousedown', callback as any);
 }
 function destroyMove(root: Root, callback: Callback) {
-  document.removeEventListener('touchmove', callback);
-  document.removeEventListener('mousemove', callback);
+  document.removeEventListener('touchmove', callback as any);
+  document.removeEventListener('mousemove', callback as any);
 }
 function destroyEnd(root: Root, callback: Callback) {
-  document.removeEventListener('touchend', callback);
-  document.removeEventListener('touchcancel', callback);
-  document.removeEventListener('mouseup', callback);
+  document.removeEventListener('touchend', callback as any);
+  document.removeEventListener('touchcancel', callback as any);
+  document.removeEventListener('mouseup', callback as any);
 }
 export class FineTouch {
   root: Root;

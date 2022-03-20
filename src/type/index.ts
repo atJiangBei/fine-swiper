@@ -7,15 +7,11 @@ export type timer = null | number;
 //配置项
 export interface Options {
   root: Root;
-  direction: direction;
-  loop: boolean;
-  auto: boolean;
-  delayed: number;
-  effect: effect;
-  callback: Function;
-  enter: Function;
-  disabledHand: boolean;
-  index: number;
-  scaleValue: number;
-  slideChange: (index: number) => void;
+  direction?: direction;
+  loop?: boolean;
+  effect?: effect;
+  disabledHand?: boolean;
+  index?: number;
+  scaleValue?: number;
+  slideChange?: (index: number) => void;
 }
