@@ -1,15 +1,14 @@
+export declare type Root = HTMLElement;
 export declare type direction = 'horizontal' | 'vertical';
 export declare type effect = 'slide' | 'fade';
 export declare type timer = null | number;
 export interface Options {
-    root: Element;
-    direction: direction;
-    loop: boolean;
-    auto: boolean;
-    delayed: number;
-    effect: effect;
-    callback: Function;
-    enter: Function;
-    disabledHand: boolean;
-    index: number;
+    root: Root;
+    direction?: direction;
+    loop?: boolean;
+    effect?: effect;
+    disabledHand?: boolean;
+    index?: number;
+    scaleValue?: number;
+    slideChange?: (index: number) => void;
 }

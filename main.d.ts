@@ -1,2 +1,3 @@
-import FineSwiper from './core/index';
-export default FineSwiper;
+import createTouch from './core/createTouch';
+import createSlide from './core/slide';
+export { createTouch, createSlide };
