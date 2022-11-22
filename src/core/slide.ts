@@ -1,4 +1,4 @@
-import { direction, Options, Root } from './../type/index';
+import { direction, Options, Root } from './type';
 
 import createTouch, {
   MoveCallbackArguments,
