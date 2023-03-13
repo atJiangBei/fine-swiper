@@ -1,6 +1,6 @@
 {
   "name": "fine-swiper",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/fine-swiper.min.js",
   "description": "swiper,vue swiper,react swiper,swipe",
   "types": "dist/main.d.ts",
